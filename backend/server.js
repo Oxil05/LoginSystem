@@ -35,6 +35,12 @@ app.get("/", (req, res) => {
 // Register endpoint
 app.post("/api/register", async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        message: "Database is not connected yet. Please check MONGODB_URI in Render environment variables.",
+      });
+    }
+
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -69,6 +75,12 @@ app.post("/api/register", async (req, res) => {
 // Login endpoint
 app.post("/api/login", async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        message: "Database is not connected yet. Please check MONGODB_URI in Render environment variables.",
+      });
+    }
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -133,14 +145,19 @@ app.get("/api/profile", async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("MongoDB Atlas connected successfully.");
-    app.listen(PORT, () => {
-      console.log(`Backend server running on port ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Backend server running on port ${PORT}`);
+});
+
+if (!process.env.MONGODB_URI) {
+  console.error("CRITICAL ERROR: MONGODB_URI environment variable is missing in Render settings!");
+} else {
+  mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => {
+      console.log("MongoDB Atlas connected successfully.");
+    })
+    .catch((error) => {
+      console.error("MongoDB Atlas connection failed:", error.message);
     });
-  })
-  .catch((error) => {
-    console.error("MongoDB Atlas connection failed:", error.message);
-  });
+}
