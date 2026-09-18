@@ -4,7 +4,7 @@ const API_URL =
   window.location.hostname === "127.0.0.1" ||
   window.location.protocol === "file:"
     ? "http://localhost:5000"
-    : "https://login-system-97ea.onrender.com";
+    : "https://loginsystem-backend-hu45.onrender.com";
 
 // Form and view elements
 const loginSection = document.getElementById("loginSection");
