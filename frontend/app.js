@@ -1,6 +1,8 @@
-// Detect environment: use localhost when running locally, or your Render URL when hosted on Vercel
+// Detect environment: use localhost when running locally (including double-clicking index.html), or Render URL on Vercel
 const API_URL =
-  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1" ||
+  window.location.protocol === "file:"
     ? "http://localhost:5000"
     : "https://login-system-97ea.onrender.com";
 

@@ -7,27 +7,10 @@ require("dotenv").config();
 
 const app = express();
 
-// Flexible CORS for Localhost & Vercel
-const allowedOrigins = process.env.FRONTEND_URL
-  ? [process.env.FRONTEND_URL, "http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:3000"]
-  : ["*"];
-
+// Flexible CORS: allows requests from file://, localhost, and Vercel
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (
-        !origin ||
-        allowedOrigins.includes("*") ||
-        allowedOrigins.includes(origin) ||
-        origin.endsWith(".vercel.app") ||
-        origin.includes("localhost") ||
-        origin.includes("127.0.0.1")
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Blocked by CORS policy"));
-      }
-    },
+    origin: true,
     credentials: true,
   })
 );
