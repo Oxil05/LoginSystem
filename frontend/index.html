@@ -1,27 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login System</title>
+    <title>Full Stack Login System</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
-      <h2>Login</h2>
+    <main class="card">
+      <!-- Login View -->
+      <section id="loginSection">
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in to your account</p>
 
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
+        <form id="loginForm">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com" required />
 
-      <button onclick="login()">Login</button>
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
 
-      <p>Don't have an account?</p>
+          <button type="submit" id="loginBtn">Sign In</button>
+          <p id="loginMessage" class="message"></p>
+        </form>
 
-      <input type="text" id="name" placeholder="Name" />
-      <button onclick="register()">Register</button>
+        <p class="toggle-text">
+          Don't have an account? <a href="#" id="toRegisterLink">Register</a>
+        </p>
+      </section>
 
-      <p id="message"></p>
-    </div>
+      <!-- Register View -->
+      <section id="registerSection" class="hidden">
+        <h2>Create Account</h2>
+        <p class="subtitle">Register with your name and email</p>
+
+        <form id="registerForm">
+          <label for="regName">Full Name</label>
+          <input type="text" id="regName" placeholder="Your Name" required />
+
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" placeholder="you@example.com" required />
+
+          <label for="regPassword">Password (min 6 chars)</label>
+          <input type="password" id="regPassword" minlength="6" placeholder="••••••••" required />
+
+          <button type="submit" id="regBtn">Create Account</button>
+          <p id="registerMessage" class="message"></p>
+        </form>
+
+        <p class="toggle-text">
+          Already have an account? <a href="#" id="toLoginLink">Sign In</a>
+        </p>
+      </section>
+    </main>
 
     <script src="app.js"></script>
   </body>

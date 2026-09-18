@@ -1,22 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Welcome to the Dashboard</h1>
+    <main class="card">
+      <h1>Dashboard</h1>
+      <p class="subtitle">Protected area requiring authentication</p>
 
-    <p>You have successfully logged in.</p>
+      <div class="dashboard-user">
+        <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+      </div>
 
-    <button onclick="logout()">Logout</button>
+      <button id="logoutBtn">Log Out</button>
+    </main>
 
     <script>
-      function logout() {
-        localStorage.removeItem("token");
+      const API_URL =
+        window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+          ? "http://localhost:5000"
+          : "https://login-system-97ea.onrender.com";
+
+      const token = localStorage.getItem("token");
+
+      // 1. If no token found, redirect immediately to login
+      if (!token) {
         window.location.href = "index.html";
+      } else {
+        // 2. Verify token against the protected backend endpoint
+        fetch(`${API_URL}/api/profile`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Session expired or unauthorized");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            document.getElementById("userName").textContent = data.user.name;
+            document.getElementById("userEmail").textContent = data.user.email;
+          })
+          .catch(() => {
+            // Token is expired or tampered with
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "index.html";
+          });
       }
+
+      // 3. Logout action
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      });
     </script>
   </body>
 </html>
